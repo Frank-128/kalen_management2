@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import AddUser from "./AddUser";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 function TheDataTable() {
   const { users } = useAppContext();
   const [amount, setAmount] = useState(2);
@@ -28,6 +29,7 @@ function TheDataTable() {
   const [selectedUser,setSelectedUser] = useState(null);
   const [addUser,setAddUser] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const navigate = useNavigate()
   const [err, setErr] = useState({
     status: false,
     name: false,
@@ -200,6 +202,7 @@ function TheDataTable() {
         pointerOnHover
         paginationRowsPerPageOptions={[amount, 3, 5, 10, 15, 20]}
         paginationPerPage={3}
+        onRowClicked={(row)=>navigate('/profile/'+row.id)}
       />
       <Modal open={editOpen} className="flex justify-center items-center py-5 md:h-screen  overflow-y-scroll w-screen " onClose={()=>setEditOpen(false)}>
       

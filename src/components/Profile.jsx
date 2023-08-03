@@ -27,7 +27,7 @@ function Profile() {
         <button className='p-3 text-white bg-blue-600 rounded shadow-slate-500 shadow-lg' onClick={()=>navigate(-1)}>Back</button>
       </div>
       <div className='flex flex-col items-center gap-3 p-4'>
-        <div className='sm:w-fit rounded-full bg-slate-300  outline outline-blue-600 outline-offset-4 p-4  shadow-slate-700 shadow-md flex items-center justify-center flex-col'>
+        <div className='sm:w-1/3  rounded-full bg-slate-300  outline outline-blue-600 outline-offset-4 p-4  shadow-slate-700 shadow-md flex items-center justify-center flex-col'>
         <img className='rounded-md h-16 w-16' src={userProfile?.gender =="male"?"/male.png":"/female.png"}  alt="" />
         <span className='font-extrabold text-2xl'>{userProfile?.name}</span>
         <span className='text-sm font-light'>{userProfile?.address}</span>
