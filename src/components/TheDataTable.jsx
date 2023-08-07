@@ -212,7 +212,7 @@ function TheDataTable() {
       >
         <p>
           <strong className="text-sm md:text-lg">
-            <i>Edit User</i>
+            Edit User
           </strong>
         </p>
         <div className="flex flex-col lg:flex-row p-2 w-full justify-between gap-2">

@@ -5,7 +5,7 @@ import Main from '../components/Main'
 function Home() {
   
   return (
-    <div className='flex flex-col h-screen w-screen  font-mono'>
+    <div className='flex flex-col h-screen w-screen  '>
        <div className='flex basis-11/12'>
        <Sidebar />
         <Main  />

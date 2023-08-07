@@ -15,7 +15,7 @@ function Sidebar() {
   return (
     <div className='basis-1/4  '>
       {/* for large devices  */}
-      <div className=' h-full hidden md:flex flex-col bg-slate-200 font-mono text-2xl gap-1  border-r-2 border-slate-300 '>
+      <div className=' h-full hidden md:flex flex-col bg-slate-200  text-2xl gap-1  border-r-2 border-slate-300 '>
        <div className='flex items-center bg-slate-50 justify-center h-1/6 w-full'> <img src="/tesla.png" alt="logo" className='h-full w-1/2 rounded object-cover' /></div>
         
         <div  onClick={()=>{navigate('/');}} id='dashboard' className={`${page == ""?'bg-slate-500 text-white':'bg-transparent'} text-slate-900 rounded flex items-center justify-start  p-4 gap-3 hover:opacity-70 duration-200 cursor-pointer`}>
@@ -37,7 +37,7 @@ function Sidebar() {
         </div>
     </div>
     {/* for smaller devices */}
-    {sidebar && <div className='basis-1/4 z-50 flex md:hidden absolute w-full h-full flex-col  bg-slate-200 font-mono text-2xl gap-1  border-r-2 border-slate-300 '>
+    {sidebar && <div className='basis-1/4 z-50 flex md:hidden absolute w-full h-full flex-col  bg-slate-200  text-2xl gap-1  border-r-2 border-slate-300 '>
         <div className='flex h-1/6 justify-center '>
         <img src="/tesla.png" alt="logo" className='h-full w-3/4 rounded object-cover' />
         </div>
