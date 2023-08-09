@@ -114,7 +114,7 @@ function TheDataTable() {
     },
     {
       name:"Actions",
-      selector:(row)=> <div className="flex gap-3 p-4 overflow-scroll">
+      selector:(row)=> <div className="flex md:gap-3 gap-1 p-2 overflow-x-scroll md:p-4 overflow-scroll">
       <button
         className="bg-blue-500  rounded text-slate-200 p-1"
         onClick={() => {
@@ -125,7 +125,7 @@ function TheDataTable() {
       >
         Update
       </button>
-      <button
+      {/* <button
         className="bg-red-500  rounded text-slate-200 p-1"
         onClick={() => Swal.fire({
           title:'Are you sure you want to delete '+row.name,
@@ -144,7 +144,7 @@ function TheDataTable() {
         )}
       >
         Delete
-      </button>
+      </button> */}
     </div>
     }
   ];

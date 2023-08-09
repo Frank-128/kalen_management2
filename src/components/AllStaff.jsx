@@ -44,28 +44,28 @@ function AllStaff() {
         Welcome,{loggedUser.name}{" "}
       </h1>
       <div className="mg:flex hidden justify-around w-full  bg-slate-100 py-3">
-        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[12rem]  shadow-slate-600 p-4">
+        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[7rem] xl:w-[12rem]  shadow-slate-600 p-4">
           <span> Total Projects</span>
           <span className="text-3xl font-bold">
             {" "}
             <CountUp duration={5} end={100} />
           </span>
         </div>
-        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg  sm:w-[8rem]  md:w-[12rem] shadow-slate-600 p-4">
+        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg  sm:w-[8rem]  md:w-[7rem] xl:w-[12rem] shadow-slate-600 p-4">
           <span> Monthly Visitors</span>
           <span className="text-3xl font-bold">
             {" "}
             <CountUp duration={5} end={42} />
           </span>
         </div>
-        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[12rem] shadow-slate-600 p-4">
+        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[7rem] xl:w-[12rem] shadow-slate-600 p-4">
           <span> Total Staff</span>
           <span className="text-3xl font-bold">
             {" "}
             <CountUp duration={5} end={8} />
           </span>
         </div>
-        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[12rem] shadow-slate-600 p-4">
+        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[10rem] xl:w-[12rem] shadow-slate-600 p-4">
           <span> Non-Staff Members</span>
           <span className="text-3xl font-bold">
             {" "}
@@ -76,7 +76,7 @@ function AllStaff() {
       <div className="md:h-[30rem] h-screen flex md:flex-row flex-col gap-2 mt-10 w-full ">
     <div className="w-full  basis-1/2 flex-col  h-full flex ">
     <p className="text-center font-light">Kalen Staff</p>
-        <ResponsiveContainer width={"100%"} height={"100%"}>
+        <ResponsiveContainer width={"90%"} height={"100%"}>
 
         <BarChart data={graphData} width={400} height={300}>
        
@@ -90,7 +90,7 @@ function AllStaff() {
         </BarChart>
         </ResponsiveContainer>
     </div>
-      <div className="basis-1/2 h-[9rem] md:h-full">
+      <div className=" w-full  basis-1/2 h-[9rem] md:h-full">
         <p className="text-center font-light">Monthly Projects done</p>
         <ResponsiveContainer width="95%" height={"90%"}>
           <AreaChart
