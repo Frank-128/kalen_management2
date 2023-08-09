@@ -47,7 +47,10 @@ const handleSubmitData = async () => {
       bio: editedUser.bio,
       gender: editedUser.gender,
       role: editedUser.role,
-    }}
+    }
+    await handleUpdate(editedUser);
+    setEditOpen(false);
+  }
   return (
     <div className=' p-3 text-slate-700'>
       <div className='flex items-start'>

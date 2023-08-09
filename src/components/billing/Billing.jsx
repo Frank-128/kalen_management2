@@ -94,7 +94,7 @@ function Billing() {
    </div>
     <div className="p-3 shadow-md shadow-slate-700">
     <DataTable data={newBills} columns={columns} 
-    title={<div className="flex justify-between border-b-2 items-center py-2 px-5"><span>Kalen Technologies Billing System</span> <button onClick={()=>setBilling(true)} className={styles.billing_button}>Create Bill</button></div>}
+    title={<div className="flex justify-between border-b-2 items-center py-2 px-5"><span className="hidden md:block">Kalen Technologies Billing System</span> <button onClick={()=>setBilling(true)} className={styles.billing_button}>Create Bill</button></div>}
     selectableRows
     pagination
     highlightOnHover

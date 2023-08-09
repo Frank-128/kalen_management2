@@ -39,33 +39,33 @@ function AllStaff() {
   
   
   return (
-    <div className="flex   items-center flex-col ">
-      <h1 className="font-semibold text-5xl flex justify-start w-full p-2 border-b-2 ">
+    <div className="flex w-screen md:w-full    items-center flex-col ">
+      <h1 className="font-semibold text-lg md:text-5xl flex justify-start w-full p-2 border-b-2 ">
         Welcome,{loggedUser.name}{" "}
       </h1>
-      <div className="flex justify-around w-full  bg-slate-100 py-3">
-        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[12rem] shadow-slate-600 p-4">
+      <div className="mg:flex hidden justify-around w-full  bg-slate-100 py-3">
+        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[12rem]  shadow-slate-600 p-4">
           <span> Total Projects</span>
           <span className="text-3xl font-bold">
             {" "}
             <CountUp duration={5} end={100} />
           </span>
         </div>
-        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[12rem] shadow-slate-600 p-4">
+        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg  sm:w-[8rem]  md:w-[12rem] shadow-slate-600 p-4">
           <span> Monthly Visitors</span>
           <span className="text-3xl font-bold">
             {" "}
             <CountUp duration={5} end={42} />
           </span>
         </div>
-        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[12rem] shadow-slate-600 p-4">
+        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[12rem] shadow-slate-600 p-4">
           <span> Total Staff</span>
           <span className="text-3xl font-bold">
             {" "}
             <CountUp duration={5} end={8} />
           </span>
         </div>
-        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[12rem] shadow-slate-600 p-4">
+        <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[12rem] shadow-slate-600 p-4">
           <span> Non-Staff Members</span>
           <span className="text-3xl font-bold">
             {" "}
@@ -73,8 +73,8 @@ function AllStaff() {
           </span>
         </div>
       </div>
-      <div className="h-[30rem] flex gap-2 mt-10 w-full ">
-    <div className="w-full basis-1/2 flex-col  h-full flex ">
+      <div className="md:h-[30rem] h-screen flex md:flex-row flex-col gap-2 mt-10 w-full ">
+    <div className="w-full  basis-1/2 flex-col  h-full flex ">
     <p className="text-center font-light">Kalen Staff</p>
         <ResponsiveContainer width={"100%"} height={"100%"}>
 
@@ -90,20 +90,15 @@ function AllStaff() {
         </BarChart>
         </ResponsiveContainer>
     </div>
-      <div className="basis-1/2">
+      <div className="basis-1/2 h-[9rem] md:h-full">
         <p className="text-center font-light">Monthly Projects done</p>
-        <ResponsiveContainer width="100%" height={"100%"}>
+        <ResponsiveContainer width="95%" height={"90%"}>
           <AreaChart
-            width={500}
-            height={400}
+            width={200}
+            height={300}
             data={monthlyVisitors}
             syncId="anyId"
-            margin={{
-              top: 10,
-              right: 30,
-              left: 0,
-              bottom: 0,
-            }}
+           
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />

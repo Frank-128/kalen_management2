@@ -222,7 +222,7 @@ function TheDataTable() {
       </div>
    <div className="p-4 bg-white shadow-md shadow-slate-700 mt-5">
    <div className="p-3 flex justify-between items-center ">
-        <span className="font-bold">Kalen Technology Solutions Staff Management</span>
+        <span className="font-bold md:block hidden">Kalen Technology Solutions Staff Management</span>
         <span className="bg-white rounded ">
           <input type="search" className="p-2 border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
          <Search/>
