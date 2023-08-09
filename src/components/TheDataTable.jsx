@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useCallback,useMemo } from "react";
 import DataTable from "react-data-table-component";
 import { useAppContext } from "../UserContext";
 import { Add, Search } from "@mui/icons-material";
@@ -22,13 +22,15 @@ import AddUser from "./AddUser";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 function TheDataTable() {
-  const { users } = useAppContext();
+  const { users,handleMultipleDelete } = useAppContext();
   const [amount, setAmount] = useState(2);
   const [search,setSearch]= useState('');
   const [editedUser, setEditedUser] = useState({});
   const [selectedUser,setSelectedUser] = useState(null);
+  const [toggleClear,setToggleClear] = useState(false);
   const [addUser,setAddUser] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [selectedRows,setSelectedRows] = useState([]);
   const navigate = useNavigate()
   const [err, setErr] = useState({
     status: false,
@@ -112,9 +114,7 @@ function TheDataTable() {
     },
     {
       name:"Actions",
-      button:true,
-      grow:2,
-      selector:(row)=> <div className="flex p-4 overflow-scroll">
+      selector:(row)=> <div className="flex gap-3 p-4 overflow-scroll">
       <button
         className="bg-blue-500  rounded text-slate-200 p-1"
         onClick={() => {
@@ -158,7 +158,13 @@ function TheDataTable() {
       }
       return false;
     });
-  };
+  }
+
+  const handleRowSelected = useCallback(state => {
+		setSelectedRows(state.selectedRows);
+	}, []);
+
+
   const handleSubmitData = async () => {
     console.log(editedUser)
     const data = {
@@ -175,47 +181,81 @@ function TheDataTable() {
     await handleUpdate(editedUser);
     setEditOpen(false);
   };
+  const contextActions = useMemo(() => {
+		const handleDelete = () => {
+			
+		Swal.fire({
+
+      title:`Are sure you want to delete these items`,
+      text:` ${selectedRows.length} items will be deleted`,
+      icon:'warning',
+      showConfirmButton:true,
+      showDenyButton:true,
+      confirmButtonText:'Yes',
+      confirmButtonColor:'green',
+      denyButtonText:'No'
+    }).then((objValue)=>{
+     
+    if(objValue.isConfirmed){
+    handleMultipleDelete(selectedRows)
+    setToggleClear(!toggleClear)
+    setSelectedRows([]);
+    }}
+    )
+		};
+
+		return (
+			<button key="delete" className="text-white p-2 rounded bg-red-800" onClick={handleDelete}  >
+				Delete
+			</button>
+		);
+	}, [users, selectedRows,toggleClear]);
 
  
- 
+ console.log(selectedRows)
   return (
     <div className="p-5 overflow-scroll md:w-full w-screen">
       
-      <div className="w-full flex justify-between bg-slate-300 p-3 rounded">
-        <span>Manage Users</span>
-        <button onClick={()=>setAddUser(true)} className="p-2 bg-blue-500 rounded text-white"><Add/> Add User</button>
+      <div className="w-full flex justify-start bg-white border-b-2 ">
+        <span className="text-2xl">Manage Users</span>
+        
       </div>
-      <div className="p-3 flex justify-between items-center ">
-        <span className="font-bold">Kalen Technology Solutions</span>
+   <div className="p-4 bg-white shadow-md shadow-slate-700 mt-5">
+   <div className="p-3 flex justify-between items-center ">
+        <span className="font-bold">Kalen Technology Solutions Staff Management</span>
         <span className="bg-white rounded ">
-          <input type="search" className="p-2 outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
-          <Search/>
+          <input type="search" className="p-2 border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
+         <Search/>
         </span>
       </div>
       <DataTable
         columns={collumns}
-        title="Kalen Staff 2023"
+        title={<button onClick={()=>setAddUser(true)} className="p-2 text-xs bg-blue-500 rounded text-white"><Add/> Add User</button>}
         data={dataFilter(users,search)}
         selectableRows
         pagination
         highlightOnHover
+        contextActions={contextActions}
+        clearSelectedRows={toggleClear}
+        onSelectedRowsChange={handleRowSelected}
         pointerOnHover
         paginationRowsPerPageOptions={[amount, 3, 5, 10, 15, 20]}
         paginationPerPage={3}
         onRowClicked={(row)=>navigate('/profile/'+row.id)}
       />
+   </div>
       <Modal open={editOpen} className="flex justify-center items-center py-5 md:h-screen  overflow-y-scroll w-screen " onClose={()=>setEditOpen(false)}>
       
       <form
         onSubmit={handleSubmit(handleSubmitData)}
-        className=" bg-slate-200 p-3  rounded shadow-xl lg:w-2/3 xl:w-1/2 lg:mt-20 w-fit md:h-fit h-3/4 overflow-y-scroll  flex items-center flex-col"
+        className=" bg-slate-200 p-3  rounded shadow-xl lg:w-2/3 xl:w-1/3 lg:mt-20 w-fit md:h-fit h-3/4   flex items-center flex-col"
       >
         <p>
           <strong className="text-sm md:text-lg">
             Edit User
           </strong>
         </p>
-        <div className="flex flex-col lg:flex-row p-2 w-full justify-between gap-2">
+        <div className="flex flex-col  p-2 w-full justify-between gap-2">
           <TextField
             error={err.status && err.name !== false}
             helperText={err.name}
@@ -240,7 +280,7 @@ function TheDataTable() {
             label="Name"
             required
             className="w-full "
-            // {...register("name")}
+            
           />
           <TextField
             error={err.status && err.email !== false}
@@ -266,10 +306,10 @@ function TheDataTable() {
             label="Email"
             required
             className="w-full"
-            // {...register("email")}
+            
           />
         </div>
-        <div className="flex p-2 gap-2 flex-col md:flex-row   w-full justify-between ">
+        <div className="flex p-2 gap-2 flex-col  w-full justify-between ">
           <TextField
             error={err.status && err.address !== false}
             helperText={err.address}
@@ -323,31 +363,63 @@ function TheDataTable() {
             required
             variant='filled'
             className="w-full"
-            // {...register("phoneNumber")}
+           
           />
+           <div className="flex items-start justify-start  w-full">
+            <FormControl>
+              <FormLabel>Gender</FormLabel>
+              <RadioGroup row defaultValue="male">
+                <FormControlLabel
+                  control={<Radio />}
+                  value="male"
+                  label="Male"
+                  checked={editedUser.gender == "male"}
+                  onChange={(e)=>setEditedUser({...editedUser,gender:e.target.value})}
+                />
+                <FormControlLabel
+                  control={<Radio />}
+                  value="female"
+                  label="Female"
+                  checked={editedUser.gender == "female"}
+                 onChange={(e)=>setEditedUser({...editedUser,gender:e.target.value})}
+                />
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <FormControl
+            className=" w-full"
+            error={err.status && err.role !== false}
+          >
+            <InputLabel id="role">Role</InputLabel>
+            <Select
+              label="Role"
+              id="role"
+              required
+              value={editedUser.role}
+              onChange={(e)=>setEditedUser({...editedUser,role:e.target.value})}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setErr({
+                  ...err,
+                  role: e.target.validationMessage,
+                  status: true,
+                });
+              }}
+              onFocus={() => {
+                setErr({ ...err, role: false });
+              }}
+            >
+              <MenuItem value="manager">Manager</MenuItem>
+              <MenuItem  value="digital marketing director">
+                Digital Marketing Director
+              </MenuItem>
+              <MenuItem  value="developer">Developer</MenuItem>
+            </Select>
+            <FormHelperText>{err.role}</FormHelperText>
+          </FormControl>
         </div>
        
-        <div className="p-2 w-full">
-          <TextField
-            multiline
-            error={err.status && err.bio !== false}
-            helperText={err.bio}
-            required
-            onInvalid={(e) => {
-              e.preventDefault();
-              setErr({ ...err, bio: e.target.validationMessage, status: true });
-            }}
-            onFocus={() => {
-              setErr({ ...err, bio: false });
-            }}
-            rows={4}
-            label="Bio"
-            className="w-full"
-            value={editedUser.bio}
-            onChange={(e)=>setEditedUser({...editedUser,bio:e.target.value})}
-            // {...register("bio")}
-          />
-        </div>
+       
 
        
 

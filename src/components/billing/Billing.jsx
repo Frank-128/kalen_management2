@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 function Billing() {
     const {handleAddBill,loggedUser,isLoading,users,usersBillings,setUsersBillings} = useAppContext();
     const [billing,setBilling] = useState(false);
-    const {register,handleSubmit} = useForm();
+    const {register,handleSubmit,reset} = useForm();
    
     const handleBill = async(inputData)=>{
     
@@ -16,6 +16,7 @@ function Billing() {
       item:inputData.item,price:inputData.price});
 
       console.log(res)
+        reset();
         setBilling(false);
 
     }
@@ -81,21 +82,19 @@ function Billing() {
   
   const newBills = loggedUser.role == "manager"?usersBillings:usersBillings.filter((item)=>item.name == loggedUser.name)
  
-  // useEffect(()=>{
-    
-  //   if(loggedUser.role !== "manager"){
-  //     console.log(usersBillings)
-  //     console.log(newBills)
-  //     setUsersBillings(newBills);
-  //   }
-  // },[loggedUser,uosersBillings])
+ const handleClose = ()=>{
+  setBilling(false)
+  reset();
+ }
 
   return (
     <div className={styles.billing}>
    <div className={styles.billing_button_container}>
-   <button onClick={()=>setBilling(true)} className={styles.billing_button}>Create Bill</button>
+  
    </div>
+    <div className="p-3 shadow-md shadow-slate-700">
     <DataTable data={newBills} columns={columns} 
+    title={<div className="flex justify-between border-b-2 items-center py-2 px-5"><span>Kalen Technologies Billing System</span> <button onClick={()=>setBilling(true)} className={styles.billing_button}>Create Bill</button></div>}
     selectableRows
     pagination
     highlightOnHover
@@ -104,7 +103,8 @@ function Billing() {
     paginationPerPage={3}
     
     />
-    <Modal open={billing} onClose={()=>setBilling(false)} className={styles.modal}>
+    </div>
+    <Modal open={billing} onClose={handleClose} className={styles.modal}>
     <form className={styles.billing_form} onSubmit={handleSubmit(handleBill)}>
       <span className={styles.title}>Add new billing</span>
      {loggedUser.role=="manager"?
@@ -118,6 +118,7 @@ function Billing() {
       <TextField required label="Item" {...register('item')} />
       <TextField required label="Price" {...register('price')} />
       <button type="submit" className={styles.submit_button}>{isLoading?<CircularProgress/>:"Add New Billing"}</button>
+      <button className="bg-red-800 p-2 rounded text-white" onClick={handleClose}>Cancel</button>
     </form>
 
     </Modal>

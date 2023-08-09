@@ -43,7 +43,7 @@ function UserContext({ children }) {
             email: staff.email,
             gender: staff.gender,
             role: staff.role,
-            bio: staff.bio,
+          
             phoneNumber: staff.phoneNumber,
             address: staff.address,
             createdAt: serverTimestamp(),
@@ -84,7 +84,8 @@ function UserContext({ children }) {
         phoneNumber: staffs.phoneNumber,
         gender: staffs.gender,
         role: staffs.role,
-        bio: staffs.bio,
+      
+        
 
         updatedAt: serverTimestamp(),
       });
@@ -153,7 +154,14 @@ function UserContext({ children }) {
     setLoggedUser({ active: false });
     navigate("/");
   };
-
+  const handleMultipleDelete = async(staffIds)=>{
+    for(let i=0;i<staffIds.length;i++){
+      console.log(staffIds.id)
+      try{await handleDelete(staffIds[i]?.id)}catch(err){
+        console.log(err)
+      }
+    }
+  }
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "staff", id));
@@ -207,8 +215,7 @@ function UserContext({ children }) {
       if (userBilling.name == items.name) {
         let date = new Date(userBilling.createdAt.seconds * 1000);
         let currDate = new Date();
-        console.log("current date is", date.getMonth());
-        console.log("billing date is ", currDate.getMonth());
+        
         if (date.getMonth() == currDate.getMonth()) {
           isPresent = true;
         }
@@ -276,6 +283,7 @@ function UserContext({ children }) {
         handleLogout,
         handleAddBill,
         handleDeleteAccount,
+        handleMultipleDelete,
         errors,
         sidebar,
         logout,

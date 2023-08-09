@@ -67,14 +67,14 @@ function AddUser({addUser,setAddUser}) {
     <Modal open={addUser} onClose={()=>setAddUser(false)} className="flex justify-center items-center py-5 md:h-screen overflow-y-scroll w-screen ">
       <form
         onSubmit={handleSubmit(handleSubmitData)}
-        className=" bg-slate-200 overflow-y-scroll p-3 rounded shadow-xl lg:w-2/3 xl:w-1/2 lg:mt-20 w-fit h-2/3  flex items-center flex-col"
+        className=" bg-slate-200 overflow-y-scroll p-3 rounded shadow-xl lg:w-2/3 xl:w-1/3 lg:mt-20 w-fit h-fit flex items-center flex-col"
       >
         <p>
           <strong className="text-sm md:text-lg">
-            <i>Add new user</i>
+            Add new user
           </strong>
         </p>
-        <div className="flex flex-col lg:flex-row p-2 w-full justify-between gap-2">
+        <div className="flex flex-col  p-2 w-full justify-between gap-2">
           <TextField
             error={err.status && err.name !== false}
             helperText={err.name}
@@ -114,7 +114,7 @@ function AddUser({addUser,setAddUser}) {
             {...register("email")}
           />
         </div>
-        <div className="flex p-2 gap-2 flex-col md:flex-row  w-full justify-between ">
+        <div className="flex p-2 gap-2 flex-col   w-full justify-between ">
           <TextField
             error={err.status && err.address !== false}
             helperText={err.address}
@@ -158,7 +158,7 @@ function AddUser({addUser,setAddUser}) {
             {...register("phoneNumber")}
           />
         </div>
-        <div className="flex gap-2 p-2 flex-col md:flex-row w-full items-center justify-between ">
+        <div className="flex gap-2 p-2 flex-col  w-full items-center justify-between ">
           <FormControl
             className=" w-full"
             error={err.status && err.role !== false}
@@ -210,27 +210,9 @@ function AddUser({addUser,setAddUser}) {
             </FormControl>
           </div>
         </div>
-        <div className="p-2 w-full">
-          <TextField
-            multiline
-            error={err.status && err.bio !== false}
-            helperText={err.bio}
-            required
-            onInvalid={(e) => {
-              e.preventDefault();
-              setErr({ ...err, bio: e.target.validationMessage, status: true });
-            }}
-            onFocus={() => {
-              setErr({ ...err, bio: false });
-            }}
-            rows={4}
-            label="Bio"
-            className="w-full"
-            {...register("bio")}
-          />
-        </div>
+       
 
-        <div className="flex  w-full gap-3 p-2 flex-col md:flex-row justify-between ">
+        <div className="flex  w-full gap-3 p-2 flex-col  justify-between ">
           <TextField
             error={err.status && err.password !== false}
             helperText={err.password}

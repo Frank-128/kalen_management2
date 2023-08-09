@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Button, CircularProgress, Modal } from '@mui/material'
+import { TextField, CircularProgress, Modal,FormControl,FormLabel,RadioGroup,FormControlLabel,Radio,InputLabel,Select,MenuItem,FormHelperText } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppContext } from '../UserContext';
 import TheDataTable from './TheDataTable'
+import { useForm } from 'react-hook-form';
 
 function Profile() {
     const navigate = useNavigate();
@@ -13,177 +14,297 @@ function Profile() {
     const [userProfile,setProfile] = useState({})
     const id = location.pathname.split('/')[2]
     const [deleteAcc,setDeleteAcc] = useState(false)
-    
+    const [err, setErr] = useState({
+      status: false,
+      name: false,
+      email: false,
+      password: false,
+      address: false,
+      phoneNumber: false,
+      bio: false,
+      gender: false,
+      role: false,
+      confirm_password: false,
+    });
+    const {handleSubmit} = useForm()
+
+
+
     useEffect(()=>{
        const theUser = users.find((item)=>item.id == id);
       
        
        setProfile(theUser) ;
     },[location,handleUpdate])
-
+const handleSubmitData = async () => {
+    
+    const data = {
+      name: editedUser.name,
+      email: editedUser.email,
+     
+      address: editedUser.address,
+      phoneNumber: editedUser.phoneNumber,
+      bio: editedUser.bio,
+      gender: editedUser.gender,
+      role: editedUser.role,
+    }}
   return (
     <div className=' p-3 text-slate-700'>
       <div className='flex items-start'>
         <button className='p-3 text-white bg-blue-600 rounded shadow-slate-500 shadow-lg' onClick={()=>navigate(-1)}>Back</button>
       </div>
-      <div className='flex flex-col items-center gap-3 p-4'>
-        <div className='sm:w-1/3  rounded-full bg-slate-300  outline outline-blue-600 outline-offset-4 p-4  shadow-slate-700 shadow-md flex items-center justify-center flex-col'>
-        <img className='rounded-md h-16 w-16' src={userProfile?.gender =="male"?"/male.png":"/female.png"}  alt="" />
-        <span className='font-extrabold text-2xl'>{userProfile?.name}</span>
-        <span className='text-sm font-light'>{userProfile?.address}</span>
-        <span className='font-semibold'>{userProfile?.role}</span>
-        </div>
-        <div className=' p-3 sm:w-3/5 w-5/6 bg-slate-300 rounded shadow-slate-700 shadow-lg'>
-            
-            <div className='flex w-full justify-between p-3'>
-                <span className='font-bold mr-2'>Gender:</span>
-            <span>{userProfile?.gender}</span>
-            </div>
-            <div className='flex w-full justify-between p-3'>
-                <span className='font-bold  mr-2'>Email:</span>
-            <span className='text-sm'>{userProfile?.email}</span>
-            </div>
-           
-            <div className='flex w-full justify-between p-3'>
-                <span className='font-bold mr-2'>Phone Number:</span>
-            <span>{userProfile?.phoneNumber}</span>
-            </div>
-            
-            <div className='flex w-full justify-between p-3'>
-                <span className='font-bold mr-2'>Short Bio:</span>
-            <span>{userProfile?.bio}</span>
-            </div>
-           <div className='flex items-center justify-center'>
-           <button className='bg-blue-900 p-3 text-slate-200 rounded ' onClick={()=>{setEditOpen(true);setEditedUser(userProfile)}}>
-                {isLoading?<CircularProgress/>:'Update Account'}
-            </button>
-           </div>
-        </div>
+      <div className='flex justify-center w-full'>
+        <span className='text-3xl'>My Profile</span>
       </div>
-      <Modal
-        className="w-full h-full flex items-center justify-center"
-        open={editOpen}
-        onClose={() => setEditOpen(false)}
-      >
-        <form className="bg-slate-400 sm:w-1/3 w-4/5 rounded p-4 flex flex-col gap-3">
-          <div className="flex flex-col gap-3">
-            <label className="font-bold" htmlFor="name">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={editedUser.name}
-              
-              onChange={(e) =>  setEditedUser(prev=>({...prev,name:e.target.value}))}
-              className="p-1"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <label className="font-bold" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={editedUser.email}
-              
-              onChange={(e) =>  setEditedUser(prev=>({...prev,email:e.target.value}))}
-              className="p-1"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <label className="font-bold" htmlFor="address">
-              Address
-            </label>
-            <input
-              type="text"
-              id="address"
-              value={editedUser.address}
-              
-              onChange={(e) =>  setEditedUser(prev=>({...prev,address:e.target.value}))}
-              className="p-1"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <label className="font-bold" htmlFor="phoneNumber">
-              Phone Number
-            </label>
-            <input
-              type="number"
-              id="phoneNumber"
-            
-              value={editedUser.phoneNumber}
-              onChange={(e) =>  setEditedUser(prev=>({...prev,phoneNumber:e.target.value}))}
-              className="p-1"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <label className="font-bold" htmlFor="role">
-              Role
-            </label>
-            <select
-              id="role"
-             
-              onChange={(e) =>  setEditedUser(prev=>({...prev,role:e.target.value}))}
-              className="p-1"
-            >
-              <option selected={editedUser.role == "manager"} value="manager">Manager</option>
-              <option selected={editedUser.role == "digital marketing director"} value="digital marketing director">Digital Marketing</option>
-              <option selected={editedUser.role == "developer"} value="developers">Developers</option>
-            </select>
-          </div>
-          <div>
-            <span className="font-bold">Gender</span>
-            <div className="flex gap-10">
-              <div>
-                <label htmlFor="male">Male</label>
-                <input
-                  type="radio"
-                  id="male"
-                  name="gender"
-                  checked={editedUser.gender == "male"}
-                  onChange={() =>  setEditedUser(prev=>({...prev,gender:"male"}))}
-                  value="male"
-                />
-              </div>
-              <div>
-                <label htmlFor="female">Female</label>
-                <input
-                  type="radio"
-                  id="fename"
-                  name="gender"
-                  checked={editedUser.gender == "female"}
-                  onChange={() => setEditedUser(prev=>({...prev,gender:"female"}))}
-                  value="female"
-                />
-              </div>
+      <div className='flex flex-col items-center gap-3 p-4'>
+       <div className='sm:w-3/5  rounded-sm bg-white justify-between p-4   shadow-slate-700 shadow-md flex items-center '>
+       <div className='flex '>
+        <img className='rounded-md h-16 w-16' src={userProfile?.gender =="male"?"/male.png":"/female.png"}  alt="" />
+       <div className='flex flex-col '>
+       <span className='font-extrabold text-2xl'>{userProfile?.name}</span>
+        <span className='font-semibold'>{userProfile?.role}</span>
+        <span className='text-sm font-light'>{userProfile?.address}</span>
+       </div>
+       </div>
+       <button className='bg-blue-900 p-3 text-slate-200 rounded ' onClick={()=>{setEditOpen(true);setEditedUser(userProfile)}}>
+                {isLoading?<CircularProgress/>:'Update Profile'}
+            </button>
+        </div>
+        <div className=' p-3 sm:w-3/5 w-5/6 bg-white rounded-sm  shadow-slate-700 shadow-lg'>
+           <span className='font-bold border-b-2 flex w-full'>Personal Information</span> 
+           <div className='flex'>
+           <div className='flex w-full flex-col justify-start p-3'>
+                <span className='font-light'>Name</span>
+               <span className='font-semibold mr-2'>{userProfile?.name}</span>
             </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <label className="font-bold" htmlFor="bio">
-              Bio
-            </label>
-            <textarea
-              
-              id="bio"
-              value={editedUser.bio}
-              
-              onChange={(e) =>  setEditedUser(prev=>({...prev,bio:e.target.value}))}
-              className="p-1"
-            />
-          </div>
-          <Button
-            onClick={() => {
+            <div className='flex w-full justify-start flex-col p-3'>
+                <span className='font-light  mr-2'>Gender</span>
+            <span className='text-sm font-semibold'>{userProfile?.gender}</span>
+            </div>
+           </div>
            
-              handleUpdate(editedUser);
-              setEditOpen(false);
+            
+            
+           
+           
+        </div>
+        <div className=' p-3 sm:w-3/5 w-5/6 bg-white rounded-sm  shadow-slate-700 shadow-lg'>
+           <span className='font-bold border-b-2 flex w-full'>Contants</span> 
+           <div className='flex'>
+           <div className='flex w-full flex-col justify-start p-3'>
+                <span className='font-light'>Phone Number</span>
+               <span className='font-semibold mr-2'>{userProfile?.phoneNumber}</span>
+            </div>
+            <div className='flex w-full justify-start flex-col p-3'>
+                <span className='font-light  mr-2'>Email</span>
+            <span className='text-sm font-semibold'>{userProfile?.email}</span>
+            </div>
+           </div>
+
+           </div>
+           <div className=' p-3 sm:w-3/5 w-5/6 bg-white rounded-sm  shadow-slate-700 shadow-lg'>
+           <span className='font-bold border-b-2 flex w-full'>Address</span> 
+           <div className='flex'>
+           <div className='flex w-full flex-col justify-start p-3'>
+                <span className='font-light'>Physical Address</span>
+               <span className='font-semibold mr-2'>{userProfile?.address}</span>
+            </div>
+           
+           </div>
+
+           </div>
+      </div>
+      <Modal open={editOpen} className="flex justify-center items-center py-5 md:h-screen  overflow-y-scroll w-screen " onClose={()=>setEditOpen(false)}>
+      
+      <form
+        onSubmit={handleSubmit(handleSubmitData)}
+        className=" bg-slate-200 p-3  rounded shadow-xl lg:w-2/3 xl:w-1/3 lg:mt-20 w-fit md:h-fit h-3/4   flex items-center flex-col"
+      >
+        <p>
+          <strong className="text-sm md:text-lg">
+            Edit User
+          </strong>
+        </p>
+        <div className="flex flex-col  p-2 w-full justify-between gap-2">
+          <TextField
+            error={err.status && err.name !== false}
+            helperText={err.name}
+            name='name'
+            onInvalid={(e) => {
+              e.preventDefault();
+              setErr({
+                ...err,
+                name: e.target.validationMessage,
+                status: true,
+              });
             }}
-            sx={{backgroundColor:'green',color:'white'}}
+            value={editedUser.name}
+            onChange={(e) => {
+              setEditedUser({...editedUser,name:e.target.value})
+              
+            }}
+            placeholder={editedUser.name}
+            onFocus={() => {
+              setErr({ ...err, name: false });
+            }}
+            label="Name"
+            required
+            className="w-full "
+            
+          />
+          <TextField
+            error={err.status && err.email !== false}
+            helperText={err.email}
+            onInvalid={(e) => {
+              e.preventDefault();
+              setErr({
+                ...err,
+                email: e.target.validationMessage,
+                status: true,
+              });
+            }}
+            value={editedUser.email}
+            onChange={(e) => {
+              setEditedUser({...editedUser,email:e.target.value})
+              
+            }}
+            placeholder={editedUser.email}
+            onFocus={() => {
+              setErr({ ...err, email: false });
+            }}
+            name='email'
+            label="Email"
+            required
+            className="w-full"
+            
+          />
+        </div>
+        <div className="flex p-2 gap-2 flex-col  w-full justify-between ">
+          <TextField
+            error={err.status && err.address !== false}
+            helperText={err.address}
+            onInvalid={(e) => {
+              e.preventDefault();
+              setErr({
+                ...err,
+                address: e.target.validationMessage,
+                status: true,
+              });
+            }}
+            placeholder={editedUser.address}
+            onFocus={() => {
+              setErr({ ...err, address: false });
+            }}
+            value={editedUser.address}
+            onChange={(e) => {
+                setEditedUser({...editedUser,address:e.target.value})
+                
+              }}
+              label="Address"
+            // {...register("address")}
+            name='address'
+            type='text'
+            required
+            className="w-full"
+            
+          />
+          <TextField
+            error={err.status && err.phoneNumber !== false}
+            helperText={err.phoneNumber}
+            onInvalid={(e) => {
+              e.preventDefault();
+              setErr({
+                ...err,
+                phoneNumber: e.target.validationMessage,
+                status: true,
+              });
+            }}
+            
+            onFocus={() => {
+              setErr({ ...err, phoneNumber: false });
+            }}
+            value={editedUser.phoneNumber}
+            onChange={(e) => {
+              setEditedUser({...editedUser,phoneNumber:e.target.value})
+              
+            }}
+            label="Phone Number"
+            type="number"
+            required
+            variant='filled'
+            className="w-full"
+           
+          />
+           <div className="flex items-start justify-start  w-full">
+            <FormControl>
+              <FormLabel>Gender</FormLabel>
+              <RadioGroup row defaultValue="male">
+                <FormControlLabel
+                  control={<Radio />}
+                  value="male"
+                  label="Male"
+                  checked={editedUser.gender == "male"}
+                  onChange={(e)=>setEditedUser({...editedUser,gender:e.target.value})}
+                />
+                <FormControlLabel
+                  control={<Radio />}
+                  value="female"
+                  label="Female"
+                  checked={editedUser.gender == "female"}
+                 onChange={(e)=>setEditedUser({...editedUser,gender:e.target.value})}
+                />
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <FormControl
+            className=" w-full"
+            error={err.status && err.role !== false}
           >
-            Edit user
-          </Button>
-        </form>
+            <InputLabel id="role">Role</InputLabel>
+            <Select
+              label="Role"
+              id="role"
+              required
+              value={editedUser.role}
+              onChange={(e)=>setEditedUser({...editedUser,role:e.target.value})}
+              onInvalid={(e) => {
+                e.preventDefault();
+                setErr({
+                  ...err,
+                  role: e.target.validationMessage,
+                  status: true,
+                });
+              }}
+              onFocus={() => {
+                setErr({ ...err, role: false });
+              }}
+            >
+              <MenuItem value="manager">Manager</MenuItem>
+              <MenuItem  value="digital marketing director">
+                Digital Marketing Director
+              </MenuItem>
+              <MenuItem  value="developer">Developer</MenuItem>
+            </Select>
+            <FormHelperText>{err.role}</FormHelperText>
+          </FormControl>
+        </div>
+       
+       
+
+       
+
+      <div className="md:flex-row w-full gap-3 flex-col flex">
+        <button onClick={(e)=>{e.preventDefault();setEditOpen(false)}} className="bg-red-800  p-3 my-5 rounded text-slate-300 w-full">Cancel</button>
+      <button
+          className="p-3 my-5 bg-blue-950 rounded text-slate-300 w-full"
+          type="submit"
+        >
+          {isLoading ? <CircularProgress /> : "Update User"}
+        </button>
+      </div>
+       
+      </form>
+    
       </Modal>
     </div>
    

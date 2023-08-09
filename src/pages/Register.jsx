@@ -55,7 +55,7 @@ function Register() {
       password: inputData.password,
       address: inputData.address,
       phoneNumber: inputData.phoneNumber,
-      bio: inputData.bio,
+     
       gender: inputData.gender,
       role: inputData.role,
     };
@@ -63,17 +63,17 @@ function Register() {
     await handleCreate(data);
   };
   return (
-    <div className="flex justify-center items-center py-5 md:h-screen overflow-y-scroll w-screen bg-white">
+    <div className="flex justify-center items-center py-5 md:h-screen overflow-y-scroll w-screen bg-backG">
       <form
         onSubmit={handleSubmit(handleSubmitData)}
-        className=" bg-slate-200 p-3 rounded shadow-xl lg:w-2/3 xl:w-1/2 lg:mt-20 w-fit h-fit  flex items-center flex-col"
+        className=" bg-slate-50 p-3 rounded shadow-xl lg:w-2/3 xl:w-1/3 lg:mt-20 w-fit h-fit  flex items-center flex-col"
       >
         <p>
           <strong className="text-sm md:text-lg">
             <i>Register to Kalen Technologies Company</i>
           </strong>
         </p>
-        <div className="flex flex-col lg:flex-row p-2 w-full justify-between gap-2">
+        <div className="flex flex-col lg:flex-ruow p-2 w-full justify-between gap-2">
           <TextField
             error={err.status && err.name !== false}
             helperText={err.name}
@@ -113,7 +113,7 @@ function Register() {
             {...register("email")}
           />
         </div>
-        <div className="flex p-2 gap-2 flex-col md:flex-row  w-full justify-between ">
+        <div className="flex p-2 gap-2 flex-col md:flex-ruow  w-full justify-between ">
           <TextField
             error={err.status && err.address !== false}
             helperText={err.address}
@@ -157,7 +157,7 @@ function Register() {
             {...register("phoneNumber")}
           />
         </div>
-        <div className="flex gap-2 p-2 flex-col md:flex-row w-full items-center justify-between ">
+        <div className="flex gap-2 p-2 flex-col md:flex-ruow w-full items-center justify-between ">
           <FormControl
             className=" w-full"
             error={err.status && err.role !== false}
@@ -210,26 +210,10 @@ function Register() {
           </div>
         </div>
         <div className="p-2 w-full">
-          <TextField
-            multiline
-            error={err.status && err.bio !== false}
-            helperText={err.bio}
-            required
-            onInvalid={(e) => {
-              e.preventDefault();
-              setErr({ ...err, bio: e.target.validationMessage, status: true });
-            }}
-            onFocus={() => {
-              setErr({ ...err, bio: false });
-            }}
-            rows={4}
-            label="Bio"
-            className="w-full"
-            {...register("bio")}
-          />
+         
         </div>
 
-        <div className="flex  w-full gap-3 p-2 flex-col md:flex-row justify-between ">
+        <div className="flex  w-full gap-3 p-2 flex-col md:flex-ruow justify-between ">
           <TextField
             error={err.status && err.password !== false}
             helperText={err.password}

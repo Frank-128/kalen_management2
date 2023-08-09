@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAppContext } from "../UserContext";
+import { useAppContext } from "../../UserContext";
 import { CircularProgress, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
+import styles from './login.module.scss';
 
 function Login() {
   const [user, setUser] = useState("");
@@ -28,10 +29,10 @@ function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen w-screen bg-white">
+    <div className={styles.login}>
       <form
         onSubmit={handleSubmit(submittedForm)}
-        className=" bg-slate-200 lg:p-3 p-10 rounded shadow-xl md:w-2/4 xl:w-1/4 h-3/4 xl:h-2/3 flex items-center justify-around flex-col"
+        className=" bg-slate-50 lg:p-3 p-10 rounded shadow-xl md:w-2/4 xl:w-1/4 h-3/4 xl:h-2/3 flex items-center justify-around flex-col"
       >
         <img src="/kalen.png" className="w-1/2  h-1/6 object-contain" alt="" />
         <span>
