@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 
 function Billing() {
-    const {handleAddBill,loggedUser,isLoading,users,usersBillings,handleMultipleDeleteBills,handleDeleteBill} = useAppContext();
+    const {handleAddBill,loggedUser,isLoading,users,usersBillings,handleMultipleDeleteBills,handleDeleteBill,handleUpdateBill} = useAppContext();
     const [billing,setBilling] = useState(false);
     const [search,setSearch] = useState("");
     const [toggleClear,setToggleClear] = useState(false);
@@ -29,6 +29,18 @@ function Billing() {
         reset();
         setBilling(false);
 
+    }
+    const handleBillUpdateFunc=async(inputData)=>{
+      console.log(editedBill)
+      const res = await handleUpdateBill({
+        id:editedBill.id,
+        name:editedBill.name,
+        item:editedBill.item,
+        price:editedBill.price,
+        billCreatedAt:editedBill.billCreatedAt
+      })
+
+      setEditedBill({status:false})
     }
 
     function FormatedDate({ timeGiven }) {
@@ -206,7 +218,7 @@ const contextActions = useMemo(() => {
   }}
   )
   };
-  console.log(newBills.length==0)
+  
   return (
     <button key="delete" className="text-white p-2 rounded bg-red-800" onClick={handleDelete}  >
       Delete
@@ -271,7 +283,7 @@ const contextActions = useMemo(() => {
 
     {/* edit the bill */}
     <Modal open={editedBill.status} onClose={()=>setEditedBill({status:false})} className={styles.modal}>
-    <form className={styles.billing_form} onSubmit={handleSubmit(handleBill)}>
+    <form className={styles.billing_form} onSubmit={handleSubmit(handleBillUpdateFunc)}>
       <span className={styles.title}>Edit {editedBill?.name}'s billing</span>
      {loggedUser.role=="manager"?
      <FormControl>

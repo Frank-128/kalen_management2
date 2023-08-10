@@ -302,6 +302,33 @@ function UserContext({ children }) {
     }
   };}
 
+
+
+  const handleUpdateBill = async (billData) => {
+    setIsLoading(true);
+    try {
+      const docRef = doc(db, "billing", billData.id);
+
+    
+
+      await updateDoc(docRef, {
+        name: billData.name,
+        item: billData.item,
+        price: billData.price,
+        billCreatedAt: billData.billCreatedAt,
+        updatedAt: serverTimestamp(),
+      });
+    } catch (e) {
+      setErrors({ status: true, payload: e });
+      console.error("Error adding document: ", e);
+    }
+    setIsLoading(false);
+
+    handleGetBills();
+  };
+
+
+
   const logout = () => {
     Swal.fire({
       title: "Are you sure you want to log out",
@@ -336,6 +363,7 @@ function UserContext({ children }) {
         handleLogin,
         handleLogout,
         handleAddBill,
+        handleUpdateBill,
         handleDeleteAccount,
         handleDeleteBill,
         handleMultipleDelete,
