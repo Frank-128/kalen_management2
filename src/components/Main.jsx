@@ -16,7 +16,7 @@ function Main() {
   });
   return (
     <div className="md:basis-3/4 bg-white">
-      <div className=" top-0 bg-backG2 text-center w-screen sm:w-full flex  p-12 md:px-24 px-2 h-12 justify-between items-center border-slate-400 border-b-2">
+      <div className=" top-0 bg-backG text-center w-screen sm:w-full flex  p-12  px-2 h-12 justify-between items-center border-slate-400 border-b-2">
         <div>
           <span className="md:hidden p-3" onClick={() => setSidebar(!sidebar)}>
             {sidebar ? <Close /> : <Menu />}
@@ -27,7 +27,7 @@ function Main() {
         </h3>
         <Popup
           trigger={
-           <span className=" flex  p-full items-center gap-2 p-3">
+           <span className=" flex p-full items-center gap-2 p-3">
               <h1 className="font-bold text-slate-50 hidden md:block">{loggedUser.name}</h1>
               <img
                 onClick={() => setToggleContainer(true)}

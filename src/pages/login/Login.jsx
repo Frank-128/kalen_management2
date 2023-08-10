@@ -36,7 +36,7 @@ function Login() {
       >
         <img src="/kalen.png" className="w-1/2  h-1/6 object-contain" alt="" />
         <span>
-          <i>Login to Kalen Technologies Company</i>
+          Login to Kalen Technologies Company
         </span>
         <i>
           {errors.status && (

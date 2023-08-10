@@ -1,7 +1,7 @@
 import React, { useEffect, useState,useCallback,useMemo } from "react";
 import DataTable from "react-data-table-component";
 import { useAppContext } from "../UserContext";
-import { Add, Search } from "@mui/icons-material";
+import { Add, Delete, Edit, Search, ViewAgenda, Visibility } from "@mui/icons-material";
 import { Modal } from "@mui/material";
 import { useForm } from "react-hook-form";
 import {
@@ -49,6 +49,8 @@ function TheDataTable() {
     shouldUseNativeValidation: true,
    
   });
+
+
   function FormatedDate({ timeGiven }) {
     if (timeGiven == null) {
       return <span>null</span>;
@@ -79,6 +81,18 @@ function TheDataTable() {
       </span>
     );
   }
+
+
+
+  const headRowStyle = {  headRow: {
+    style: {
+      backgroundColor: 'lightgrey',
+      fontWeight:'bold'
+    }
+  },
+  cells:{style:{paddingLeft:'1px'}}
+
+}
 
   const collumns = [
     {
@@ -114,19 +128,30 @@ function TheDataTable() {
     },
     {
       name:"Actions",
-      selector:(row)=> <div className="flex md:gap-3 gap-1 p-2 overflow-x-scroll md:p-4 overflow-scroll">
+
+        wrap:true,
+      
+      cell:(row)=> <div className="flex justify-around w-full xl:gap-2 gap-1 p-2  md:p-1 ">
+     <button
+        className=" rounded text-slate-200 p-1"
+        onClick={() => {
+         navigate('/profile/'+row.id)
+        }}
+      >
+      <Visibility color='success'/>
+      </button>
       <button
-        className="bg-blue-500  rounded text-slate-200 p-1"
+        className="rounded text-slate-200 p-1"
         onClick={() => {
           console.log(row)
           setEditOpen(true);
           setEditedUser(row);
         }}
       >
-        Update
+      <Edit color='info'/>
       </button>
-      {/* <button
-        className="bg-red-500  rounded text-slate-200 p-1"
+      <button
+        className=" rounded text-slate-200 p-1"
         onClick={() => Swal.fire({
           title:'Are you sure you want to delete '+row.name,
           text:'User will be permanently deleted',
@@ -143,8 +168,9 @@ function TheDataTable() {
         }}
         )}
       >
-        Delete
-      </button> */}
+        <Delete color='error'/>
+      </button>
+     
     </div>
     }
   ];
@@ -159,6 +185,8 @@ function TheDataTable() {
       return false;
     });
   }
+
+
 
   const handleRowSelected = useCallback(state => {
 		setSelectedRows(state.selectedRows);
@@ -220,28 +248,30 @@ function TheDataTable() {
         <span className="text-2xl">Manage Users</span>
         
       </div>
-   <div className="p-4 bg-white shadow-md shadow-slate-700 mt-5">
+   <div className="p-4 bg-white border mt-5">
    <div className="p-3 flex justify-between items-center ">
-        <span className="font-bold md:block hidden">Kalen Technology Solutions Staff Management</span>
-        <span className="bg-white rounded ">
-          <input type="search" className="p-2 border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
-         <Search/>
+        <button onClick={()=>setAddUser(true)} className=" md:p-2 p-1  text-xs bg-blue-950 rounded text-white"><Add/> Add User</button>
+        <span className="bg-white rounded flex ">
+          <input type="text" className="p-2 w-full h-1/2 border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
+        <span className="border"> <Search sx={{border:'1px solid lightgray',height:'100%',}}  /></span>
         </span>
       </div>
       <DataTable
         columns={collumns}
-        title={<button onClick={()=>setAddUser(true)} className="p-2 text-xs bg-blue-500 rounded text-white"><Add/> Add User</button>}
         data={dataFilter(users,search)}
         selectableRows
         pagination
+        customStyles={headRowStyle}
         highlightOnHover
         contextActions={contextActions}
         clearSelectedRows={toggleClear}
+        progressPending={users.length==0}
+        progressComponent={<div>...Loading <CircularProgress/></div>}
         onSelectedRowsChange={handleRowSelected}
         pointerOnHover
-        paginationRowsPerPageOptions={[amount, 3, 5, 10, 15, 20]}
+        paginationRowsPerPageOptions={[3, 5, 10, 15, 20]}
         paginationPerPage={3}
-        onRowClicked={(row)=>navigate('/profile/'+row.id)}
+        
       />
    </div>
       <Modal open={editOpen} className="flex justify-center items-center py-5 md:h-screen  overflow-y-scroll w-screen " onClose={()=>setEditOpen(false)}>

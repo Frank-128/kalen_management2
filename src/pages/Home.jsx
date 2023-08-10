@@ -10,7 +10,7 @@ function Home() {
        <Sidebar />
         <Main  />
        </div>
-        <footer className="bg-backG2 text-white basis-1/12 bottom-0 items-center flex justify-center">
+        <footer className="bg-backG text-white basis-1/12 bottom-0 items-center flex justify-center">
         <span>&copy;2023 Kalen Technologies Solutions.</span>
     </footer>
     </div>

@@ -17,9 +17,11 @@ import {
   serverTimestamp,
   query,
   orderBy,
+  writeBatch,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+// const batchDb = firebase.firestore();
 
 const appContext = createContext();
 
@@ -30,6 +32,7 @@ function UserContext({ children }) {
   const [sidebar, setSidebar] = useState(false);
   const [usersBillings, setUsersBillings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleCreate = async (staff) => {
@@ -195,7 +198,7 @@ function UserContext({ children }) {
       const data = [];
 
       res.forEach((item) => {
-        data.push(item.data());
+        data.push({id:item.id,...item.data()});
       });
       
       
@@ -205,18 +208,62 @@ function UserContext({ children }) {
       console.log(err);
     }
   };
+  const handleDeleteBill = async(id)=>{
+    try {
+      await deleteDoc(doc(db, "billing", id));
+
+      handleGetBills();
+      Swal.fire({
+        title:'Bill deleted successfully',
+        text:`the bill was permanently removed from records`,
+        icon:'success',
+        showConfirmButton:false,
+        timer:3000
+      });
+    } catch (err) {
+      setErrors({ status: true, payload: err });
+    }
+  }
+
+  const handleMultipleDeleteBills = async(bills)=>{
+  
+    const batch = writeBatch(db)
+    try{
+      console.log(bills)
+      bills.forEach((bill)=>{
+       
+
+        batch.delete(doc(db,'billing',bill?.id));
+      })
+     
+     
+
+    const res =   await batch.commit()
+    Swal.fire({
+      title:'Bills deleted successfully',
+      text:`selected bills were permanently deleted from records`,
+      icon:'success',
+      showConfirmButton:false,
+      timer:3000
+    });
+    }catch(err){
+      console.log("firebase error")
+      console.log(err);
+    }
+  }
 
   const handleAddBill = async (items) => {
     setIsLoading(true);
     var isPresent = false;
-
+    console.log(typeof(items.selectedDate))
     usersBillings.forEach((userBilling) => {
       
       if (userBilling.name == items.name) {
-        let date = new Date(userBilling.createdAt.seconds * 1000);
-        let currDate = new Date();
-        
-        if (date.getMonth() == currDate.getMonth()) {
+       
+        let existingDate = new Date(userBilling.billCreatedAt);
+        let chosenDate = new Date(items.selectedDate)
+        console.log(typeof(chosenDate))
+        if (existingDate.getMonth() ==  chosenDate.getMonth()) {
           isPresent = true;
         }
       }
@@ -237,11 +284,18 @@ function UserContext({ children }) {
         name: items.name,
         item: items.item,
         price: items.price,
-        createdAt: serverTimestamp(),
+        billCreatedAt: items.selectedDate,
+        createdAt:serverTimestamp()
       });
-      setIsLoading(false);
       handleGetBills();
-      return "added successfully";
+      setIsLoading(false);
+     Swal.fire({
+        title:'Bill created successfully',
+        text:`bill for ${items.name} successfully created`,
+        icon:'success',
+        showConfirmButton:false,
+        timer:3000
+      });
     } catch (err) {
       console.log(err);
       setIsLoading(false);
@@ -283,7 +337,9 @@ function UserContext({ children }) {
         handleLogout,
         handleAddBill,
         handleDeleteAccount,
+        handleDeleteBill,
         handleMultipleDelete,
+        handleMultipleDeleteBills,
         errors,
         sidebar,
         logout,

@@ -16,22 +16,22 @@ function Sidebar() {
     <div className='basis-1/4  '>
       {/* for large devices  */}
       <div className=' h-full hidden md:flex flex-col bg-backG  text-2xl gap-1  border-r-2 border-slate-300 '>
-       <div className='flex items-center  bg-white justify-center h-1/6 w-full'> <img src="/kalen.png" alt="logo" className='h-full w-1/2 rounded object-cover' /></div>
+       <div className='flex items-center  bg-white mb-8 justify-center h-1/6 w-full'> <img src="/kalen.png" alt="logo" className='h-full  w-1/2 rounded object-cover' /></div>
         
-        <div  onClick={()=>{navigate('/');}} id='dashboard' className={`${page == ""?'bg-slate-500 text-white':'bg-transparent'} text-slate-200 rounded flex items-center justify-start  p-4 gap-3 hover:bg-slate-200 hover:text-slate-700 hover:opacity-70 duration-200 cursor-pointer`}>
+        <div  onClick={()=>{navigate('/');}} id='dashboard' className={`${page == ""?'bg-slate-500 text-white':'bg-transparent'} text-slate-200  flex items-center justify-start  p-4 gap-3 hover:bg-slate-200 hover:text-slate-700 hover:opacity-70 duration-200 cursor-pointer`}>
             <Dashboard/>
             <span>Dashboard </span>
         </div>
        
-        {loggedUser.role === "manager" && <div onClick={()=>{navigate('/staff')}} className={`${page=="staff"?'bg-slate-50 text-slate-700':'bg-transparent'} text-slate-200 rounded p-4 gap-3 flex items-center hover:bg-slate-200 hover:text-slate-700 justify-start hover:opacity-70  duration-200 cursor-pointer`}>
+        {loggedUser.role === "manager" && <div onClick={()=>{navigate('/staff')}} className={`${page=="staff"?'bg-slate-50 text-slate-700':'bg-transparent'} text-slate-200  p-4 gap-3 flex items-center hover:bg-slate-200 hover:text-slate-700 justify-start hover:opacity-70  duration-200 cursor-pointer`}>
           <PeopleAlt/>
           <span>Staff</span>
         </div>}
-        <div onClick={()=>{navigate('/billing');}} className={`${page=="billing"?'bg-slate-50 text-slate-700':'bg-transparent'} text-slate-200 flex justify-start items-center gap-3 rounded p-4 hover:opacity-70 hover:bg-slate-200 hover:text-slate-700   duration-200 cursor-pointer`}>
+        <div onClick={()=>{navigate('/billing');}} className={`${page=="billing"?'bg-slate-50 text-slate-700':'bg-transparent'} text-slate-200 flex justify-start items-center gap-3  p-4 hover:opacity-70 hover:bg-slate-200 hover:text-slate-700   duration-200 cursor-pointer`}>
             <Money/>
             <span>Billing</span>
         </div>
-        <div onClick={logout} className='text-slate-50 rounded p-4 flex justify-start gap-3 items-center hover:opacity-70  duration-500 cursor-pointer'>
+        <div onClick={logout} className='text-slate-50  p-4 flex justify-start gap-3 items-center hover:opacity-70  duration-500 cursor-pointer'>
             <Logout/>
             <span>Logout </span>
         </div>
