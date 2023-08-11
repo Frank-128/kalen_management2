@@ -53,11 +53,11 @@ function UserContext({ children }) {
             updatedAt: null,
           });
 
-          emailjs.send('service_uc518pg','template_aoitdac',{
+          emailjs.send('service_s0v7nhi','template_b1vsl3s',{
             name:staff.name,
             email:staff.email,
             password:staff.password
-          },'vgeIYM1AUyvObQ2Fo').then(function(response) {
+          },'Xd-7yaYYB3NRIYQAE').then(function(response) {
             console.log('SUCCESS!', response.status, response.text);
          }, function(error) {
             console.log('FAILED...', error);

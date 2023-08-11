@@ -63,21 +63,21 @@ function AddUser({addUser,setAddUser}) {
     console.log(data)
     await handleCreate(data);
     setAddUser(false)
-    
+    reset()
   };
   return (
     <Modal open={addUser} onClose={()=>{setAddUser(false);reset()}} className="flex justify-center items-center py-5 md:h-screen overflow-y-scroll w-screen ">
       <form
         onSubmit={handleSubmit(handleSubmitData)}
-        className=" bg-slate-200 overflow-y-scroll p-3 rounded shadow-xl lg:w-2/3 xl:w-1/3 lg:mt-20 w-fit h-fit flex items-center flex-col"
+        className=" bg-slate-200  p-3 rounded shadow-xl lg:w-2/3 xl:w-1/3 lg:mt-20 w-fit h-fit flex items-center flex-col"
       >
         <p>
           <strong className="text-sm md:text-lg">
             Add new user
           </strong>
         </p>
-        <div className="flex flex-col  p-2 w-full justify-between gap-2">
-          <TextField
+        <div className="flex flex-col md:flex-row  p-2 w-full justify-between gap-2">
+           <TextField
             error={err.status && err.name !== false}
             helperText={err.name}
             onInvalid={(e) => {
@@ -95,8 +95,8 @@ function AddUser({addUser,setAddUser}) {
             required
             className="w-full "
             {...register("name")}
-          />
-          <TextField
+           />
+           <TextField
             error={err.status && err.email !== false}
             helperText={err.email}
             onInvalid={(e) => {
@@ -114,9 +114,9 @@ function AddUser({addUser,setAddUser}) {
             required
             className="w-full"
             {...register("email")}
-          />
+           />
         </div>
-        <div className="flex p-2 gap-2 flex-col   w-full justify-between ">
+        <div className="flex p-2 gap-2 flex-col md:flex-row  w-full justify-between ">
           <TextField
             error={err.status && err.address !== false}
             helperText={err.address}
@@ -160,7 +160,7 @@ function AddUser({addUser,setAddUser}) {
             {...register("phoneNumber")}
           />
         </div>
-        <div className="flex gap-2 p-2 flex-col  w-full items-center justify-between ">
+        <div className="flex gap-2 p-2 flex-col md:flex-row w-full items-center justify-between ">
           <FormControl
             className=" w-full"
             error={err.status && err.role !== false}
@@ -214,7 +214,7 @@ function AddUser({addUser,setAddUser}) {
         </div>
        
 
-        <div className="flex  w-full gap-3 p-2 flex-col  justify-between ">
+        <div className="flex  w-full gap-3 p-2 flex-col md:flex-row justify-between ">
           <TextField
             error={err.status && err.password !== false}
             helperText={err.password}
@@ -258,11 +258,11 @@ function AddUser({addUser,setAddUser}) {
         </div>
 
        <div className="flex md:flex-row w-full gap-3 flex-col">
-        <button onClick={()=>{setAddUser(false);reset()}} className="p-3 my-5  bg-red-800 rounded text-slate-300 w-full">
+        <button onClick={()=>{setAddUser(false);reset()}} className="p-3 my-5  bg-red-800 rounded text-white w-full">
             Cancel
         </button>
        <button
-          className="p-3 my-5 bg-green-600 rounded text-slate-300 w-full"
+          className="p-3 my-5 bg-green-800 rounded text-white w-full"
           type="submit"
         >
           {isLoading ? <CircularProgress /> : "Add User"}

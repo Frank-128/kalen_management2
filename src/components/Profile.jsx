@@ -60,16 +60,16 @@ const handleSubmitData = async () => {
         <span className='text-3xl'>My Profile</span>
       </div>
       <div className='flex flex-col items-center gap-3 p-4'>
-       <div className='sm:w-3/5  rounded-sm bg-white justify-between p-4   shadow-slate-700 shadow-md flex items-center '>
+       <div className='sm:w-3/5  rounded-sm bg-white justify-between p-4   shadow-slate-700 shadow-md flex md:flex-row flex-col items-center '>
        <div className='flex '>
-        <img className='rounded-md h-16 w-16' src={userProfile?.gender =="male"?"/male.png":"/female.png"}  alt="" />
+        <img className='rounded-md sm:h-16 h-10 w-10 sm:w-16' src={userProfile?.gender =="male"?"/male.png":"/female.png"}  alt="" />
        <div className='flex flex-col '>
-       <span className='font-extrabold text-2xl'>{userProfile?.name}</span>
+       <span className='font-extrabold text-lg sm:text-2xl'>{userProfile?.name}</span>
         <span className='font-semibold'>{userProfile?.role}</span>
         <span className='text-sm font-light'>{userProfile?.address}</span>
        </div>
        </div>
-       <button className='bg-blue-900 p-3 text-slate-200 rounded ' onClick={()=>{setEditOpen(true);setEditedUser(userProfile)}}>
+       <button className='bg-blue-900 p-3 w-full md:w-fit text-slate-200 rounded ' onClick={()=>{setEditOpen(true);setEditedUser(userProfile)}}>
                 {isLoading?<CircularProgress/>:'Update Profile'}
             </button>
         </div>
@@ -93,7 +93,7 @@ const handleSubmitData = async () => {
         </div>
         <div className=' p-3 sm:w-3/5 w-5/6 bg-white rounded-sm  shadow-slate-700 shadow-lg'>
            <span className='font-bold border-b-2 flex w-full'>Contants</span> 
-           <div className='flex'>
+           <div className='flex md:flex-row flex-col'>
            <div className='flex w-full flex-col justify-start p-3'>
                 <span className='font-light'>Phone Number</span>
                <span className='font-semibold mr-2'>{userProfile?.phoneNumber}</span>
@@ -117,7 +117,7 @@ const handleSubmitData = async () => {
 
            </div>
       </div>
-      <Modal open={editOpen} className="flex justify-center items-center py-5 md:h-screen  overflow-y-scroll w-screen " onClose={()=>setEditOpen(false)}>
+      <Modal open={editOpen} className="flex justify-center items-center h-fit py-5 md:h-screen  overflow-y-scroll w-screen " onClose={()=>setEditOpen(false)}>
       
       <form
         onSubmit={handleSubmit(handleSubmitData)}
@@ -296,7 +296,7 @@ const handleSubmitData = async () => {
 
        
 
-      <div className="md:flex-row w-full gap-3 flex-col flex">
+      <div className="md:flex-row w-full md:gap-3 flex-col flex">
         <button onClick={(e)=>{e.preventDefault();setEditOpen(false)}} className="bg-red-800  p-3 my-5 rounded text-slate-300 w-full">Cancel</button>
       <button
           className="p-3 my-5 bg-blue-950 rounded text-slate-300 w-full"
