@@ -45,7 +45,7 @@ function TheDataTable() {
     confirm_password: false,
   });
   const {handleUpdate,isLoading,handleDelete} = useAppContext()
-  const {  handleSubmit } = useForm({
+  const {  handleSubmit,reset } = useForm({
     shouldUseNativeValidation: true,
    
   });
@@ -164,7 +164,7 @@ function TheDataTable() {
         }).then((objValue)=>{
           console.log(objValue)
         if(objValue.isConfirmed){
-        handleDelete(row.id)
+        handleDelete(row)
         }}
         )}
       >
@@ -249,14 +249,15 @@ function TheDataTable() {
         
       </div>
    <div className="p-4 bg-white border mt-5">
-   <div className="p-3 flex justify-between items-center ">
+   
+      <DataTable
+        title={<div className="p-3 flex justify-between items-center ">
         <button onClick={()=>setAddUser(true)} className=" md:p-2 p-1  text-xs bg-blue-950 rounded text-white"><Add/> Add User</button>
         <span className="bg-white rounded flex ">
-          <input type="text" className="p-2 w-full h-1/2 border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
+          <input type="text" className="p-2 w-full h-1/2 text-sm border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
         <span className="border"> <Search sx={{border:'1px solid lightgray',height:'100%',}}  /></span>
         </span>
-      </div>
-      <DataTable
+      </div>}
         columns={collumns}
         data={dataFilter(users,search)}
         selectableRows

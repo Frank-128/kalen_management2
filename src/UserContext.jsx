@@ -46,12 +46,20 @@ function UserContext({ children }) {
             email: staff.email,
             gender: staff.gender,
             role: staff.role,
-          
+
             phoneNumber: staff.phoneNumber,
             address: staff.address,
             createdAt: serverTimestamp(),
             updatedAt: null,
           });
+          Swal.fire({
+            title: "Staff created succesfully",
+            text: "A new staff has been added",
+            icon: "success",
+            timer: 4000,
+            showConfirmButton: false,
+          });
+          return { status: 200 };
         })
         .catch((error) => {
           setErrors({ status: true, payload: error });
@@ -62,7 +70,7 @@ function UserContext({ children }) {
     }
     setIsLoading(false);
     handleRead();
-    navigate("/login");
+    // navigate("/login");
   };
 
   const handleUpdate = async (staffs) => {
@@ -87,10 +95,16 @@ function UserContext({ children }) {
         phoneNumber: staffs.phoneNumber,
         gender: staffs.gender,
         role: staffs.role,
-      
-        
 
         updatedAt: serverTimestamp(),
+      });
+
+      Swal.fire({
+        title: "Staff updated succesfully",
+        text: " staff information has been updated",
+        icon: "success",
+        timer: 4000,
+        showConfirmButton: false,
       });
     } catch (e) {
       setErrors({ status: true, payload: e });
@@ -157,19 +171,60 @@ function UserContext({ children }) {
     setLoggedUser({ active: false });
     navigate("/");
   };
-  const handleMultipleDelete = async(staffIds)=>{
-    for(let i=0;i<staffIds.length;i++){
-      console.log(staffIds.id)
-      try{await handleDelete(staffIds[i]?.id)}catch(err){
-        console.log(err)
-      }
-    }
-  }
-  const handleDelete = async (id) => {
+
+
+  const handleMultipleDelete = async (staffIds) => {
+    const batch = writeBatch(db);
     try {
-      await deleteDoc(doc(db, "staff", id));
+
+      staffIds.forEach((staff) => {
+        batch.delete(doc(db,"staff",staff.id));
+        // console.log(staff.id)
+        let userBills = usersBillings.filter((item) => item.name == staff.name);
+        userBills.forEach((bill) => {
+          batch.delete(doc(db, "billing", bill?.id));
+          // console.log(bill.id)
+        });
+      });
+
+      await batch.commit();
 
       handleRead();
+      handleGetBills();
+      Swal.fire({
+        title: "Users deleted successfully",
+        text: "All the selected users have been removed",
+        timer: 4000,
+        showConfirmButton: false,
+        icon: "success",
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+  const handleDelete = async (row) => {
+    try {
+      await deleteDoc(doc(db, "staff", row.id));
+      const batch = writeBatch(db);
+      
+      let userBills = usersBillings.filter((item) => item.name == row.name);
+      userBills.forEach((bill) => {
+        batch.delete(doc(db, "billing", bill?.id));
+      });
+
+      const res = await batch.commit();
+
+      handleRead();
+      handleGetBills();
+      Swal.fire({
+        title: "User deleted successfully",
+        text: "All the user's bills have been removed",
+        timer: 4000,
+        showConfirmButton: false,
+        icon: "success",
+      });
     } catch (err) {
       setErrors({ status: true, payload: err });
     }
@@ -181,7 +236,6 @@ function UserContext({ children }) {
   useEffect(() => {
     const user = Cookies.get("user");
     if (user) {
-      
       const userData = JSON.parse(user);
 
       setLoggedUser({ active: true, ...userData });
@@ -189,127 +243,112 @@ function UserContext({ children }) {
   }, []);
 
   const handleGetBills = async () => {
-
     try {
       const res = await getDocs(
         query(collection(db, "billing"), orderBy("createdAt", "desc"))
       );
-      
+
       const data = [];
 
       res.forEach((item) => {
-        data.push({id:item.id,...item.data()});
+        data.push({ id: item.id, ...item.data() });
       });
-      
-      
-        setUsersBillings(data);
-    
+
+      setUsersBillings(data);
     } catch (err) {
       console.log(err);
     }
   };
-  const handleDeleteBill = async(id)=>{
+  const handleDeleteBill = async (id) => {
     try {
       await deleteDoc(doc(db, "billing", id));
 
       handleGetBills();
       Swal.fire({
-        title:'Bill deleted successfully',
-        text:`the bill was permanently removed from records`,
-        icon:'success',
-        showConfirmButton:false,
-        timer:3000
+        title: "Bill deleted successfully",
+        text: `the bill was permanently removed from records`,
+        icon: "success",
+        showConfirmButton: false,
+        timer: 3000,
       });
     } catch (err) {
       setErrors({ status: true, payload: err });
     }
-  }
+  };
 
-  const handleMultipleDeleteBills = async(bills)=>{
-  
-    const batch = writeBatch(db)
-    try{
-      console.log(bills)
-      bills.forEach((bill)=>{
-       
+  const handleMultipleDeleteBills = async (bills) => {
+    const batch = writeBatch(db);
+    try {
+      bills.forEach((bill) => {
+        batch.delete(doc(db, "billing", bill?.id));
+      });
 
-        batch.delete(doc(db,'billing',bill?.id));
-      })
-     
-     
-
-    const res =   await batch.commit()
-    Swal.fire({
-      title:'Bills deleted successfully',
-      text:`selected bills were permanently deleted from records`,
-      icon:'success',
-      showConfirmButton:false,
-      timer:3000
-    });
-    }catch(err){
-      console.log("firebase error")
+      const res = await batch.commit();
+      handleGetBills()
+      Swal.fire({
+        title: "Bills deleted successfully",
+        text: `selected bills were permanently deleted from records`,
+        icon: "success",
+        showConfirmButton: false,
+        timer: 3000,
+      });
+    } catch (err) {
+      console.log("firebase error");
       console.log(err);
     }
-  }
+  };
 
   const handleAddBill = async (items) => {
     setIsLoading(true);
     var isPresent = false;
-    console.log(typeof(items.selectedDate))
+    console.log(typeof items.selectedDate);
     usersBillings.forEach((userBilling) => {
-      
       if (userBilling.name == items.name) {
-       
         let existingDate = new Date(userBilling.billCreatedAt);
-        let chosenDate = new Date(items.selectedDate)
-        console.log(typeof(chosenDate))
-        if (existingDate.getMonth() ==  chosenDate.getMonth()) {
+        let chosenDate = new Date(items.selectedDate);
+        console.log(typeof chosenDate);
+        if (existingDate.getMonth() == chosenDate.getMonth()) {
           isPresent = true;
         }
       }
     });
-    if(isPresent)
-    {
+    if (isPresent) {
       setIsLoading(false);
-       Swal.fire({
-        title:'Action Denied',
-        text:'You can add only one bill per month',
-        icon:'error',
-        timer:5000,
+      Swal.fire({
+        title: "Action Denied",
+        text: "You can add only one bill per month",
+        icon: "error",
+        timer: 5000,
       });
-  }
-    else{
-    try {
-      await addDoc(collection(db, "billing"), {
-        name: items.name,
-        item: items.item,
-        price: items.price,
-        billCreatedAt: items.selectedDate,
-        createdAt:serverTimestamp()
-      });
-      handleGetBills();
-      setIsLoading(false);
-     Swal.fire({
-        title:'Bill created successfully',
-        text:`bill for ${items.name} successfully created`,
-        icon:'success',
-        showConfirmButton:false,
-        timer:3000
-      });
-    } catch (err) {
-      console.log(err);
-      setIsLoading(false);
+    } else {
+      try {
+        await addDoc(collection(db, "billing"), {
+          name: items.name,
+          item: items.item,
+          price: items.price,
+          billCreatedAt: items.selectedDate,
+          createdAt: serverTimestamp(),
+        });
+        handleGetBills();
+        setIsLoading(false);
+        Swal.fire({
+          title: "Bill created successfully",
+          text: `bill for ${items.name} successfully created`,
+          icon: "success",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
     }
-  };}
-
-
+  };
 
   const handleUpdateBill = async (billData) => {
     setIsLoading(true);
     try {
       const docRef = doc(db, "billing", billData.id);
-
-    
 
       await updateDoc(docRef, {
         name: billData.name,
@@ -327,8 +366,6 @@ function UserContext({ children }) {
     handleGetBills();
   };
 
-
-
   const logout = () => {
     Swal.fire({
       title: "Are you sure you want to log out",
@@ -345,9 +382,7 @@ function UserContext({ children }) {
     });
   };
 
-  
   useEffect(() => {
-    
     handleGetBills();
   }, []);
 

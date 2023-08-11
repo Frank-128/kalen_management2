@@ -28,7 +28,7 @@ function AddUser({addUser,setAddUser}) {
   const [bio, setBio] = useState("");
   const [gender, setGender] = useState("");
   const [role, setRole] = useState("manager");
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit,reset } = useForm({
     shouldUseNativeValidation: true,
   });
   const { handleCreate, isLoading } = useAppContext();
@@ -62,9 +62,11 @@ function AddUser({addUser,setAddUser}) {
     };
     console.log(data)
     await handleCreate(data);
+    setAddUser(false)
+    
   };
   return (
-    <Modal open={addUser} onClose={()=>setAddUser(false)} className="flex justify-center items-center py-5 md:h-screen overflow-y-scroll w-screen ">
+    <Modal open={addUser} onClose={()=>{setAddUser(false);reset()}} className="flex justify-center items-center py-5 md:h-screen overflow-y-scroll w-screen ">
       <form
         onSubmit={handleSubmit(handleSubmitData)}
         className=" bg-slate-200 overflow-y-scroll p-3 rounded shadow-xl lg:w-2/3 xl:w-1/3 lg:mt-20 w-fit h-fit flex items-center flex-col"
@@ -256,7 +258,7 @@ function AddUser({addUser,setAddUser}) {
         </div>
 
        <div className="flex md:flex-row w-full gap-3 flex-col">
-        <button onClick={()=>setAddUser(false)} className="p-3 my-5  bg-red-800 rounded text-slate-300 w-full">
+        <button onClick={()=>{setAddUser(false);reset()}} className="p-3 my-5  bg-red-800 rounded text-slate-300 w-full">
             Cancel
         </button>
        <button
