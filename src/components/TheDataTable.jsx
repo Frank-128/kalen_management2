@@ -251,10 +251,10 @@ function TheDataTable() {
    <div className="p-4 bg-white border mt-5">
    
       <DataTable
-        title={<div className="p-3 flex justify-between items-center ">
-        <button onClick={()=>setAddUser(true)} className=" md:p-2 p-1  text-xs bg-blue-950 rounded text-white"><Add/> Add User</button>
-        <span className="bg-white rounded flex ">
-          <input type="text" className="p-2 w-full h-1/2 text-sm border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
+        title={<div className="p-3 flex gap-2 justify-between items-center ">
+        <button onClick={()=>setAddUser(true)} className=" md:p-2 p-1  text-xs bg-blue-950 rounded text-white"><Add/><span className="sm:block hidden"> Add User</span></button>
+        <span className="bg-white rounded flex  ">
+          <input type="text" className="p-2 sm:w-full w-3/4 h-1/2 text-sm border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
         <span className="border"> <Search sx={{border:'1px solid lightgray',height:'100%',}}  /></span>
         </span>
       </div>}

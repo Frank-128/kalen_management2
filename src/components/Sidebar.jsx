@@ -16,7 +16,7 @@ function Sidebar() {
     <div className='basis-1/4  '>
       {/* for large devices  */}
       <div className=' h-full hidden md:flex flex-col bg-backG  text-2xl gap-1  border-r-2 border-slate-300 '>
-       <div className='flex items-center  bg-white mb-8 justify-center h-1/6 w-full'> <img src="/kalen.png" alt="logo" className='h-full  w-1/2 rounded object-cover' /></div>
+       <div className='flex items-center  bg-white mb-8 justify-center h-1/6 w-full'> <img src="/kalen.png" alt="logo" className='xl:h-full  xl:w-1/2 w-36 h-36  object-cover' /></div>
         
         <div  onClick={()=>{navigate('/');}} id='dashboard' className={`${page == ""?'bg-slate-500 text-white':'bg-transparent'} text-slate-200  flex items-center justify-start  p-4 gap-3 hover:bg-slate-200 hover:text-slate-700 hover:opacity-70 duration-200 cursor-pointer`}>
             <Dashboard/>

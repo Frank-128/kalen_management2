@@ -227,15 +227,15 @@ const contextActions = useMemo(() => {
 }, [newBills, selectedRows,toggleClear]);
 
   return (
-    <div className={styles.billing}>
+    <div className='flex w-screen md:w-full p-3 text-lg flex-col'>
    <div className={styles.billing_button_container}>
   
    </div>
     <div className="p-3 border-slate-300 border">
     <DataTable 
-    title={<div className="flex justify-between items-center  "> <button onClick={()=>setBilling(true)} className={styles.billing_button}>Create Bill</button>
+    title={<div className="sm:flex-row mb-2  flex-col gap-2 flex justify-between items-center  "> <button onClick={()=>setBilling(true)} className={"bg-blue-900 rounded text-sm md:text-lg text-white p-2"}>Create Bill</button>
      <span className="bg-white rounded flex ">
-          <input type="text" className="p-2 w-full text-sm h-1/2 border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
+          <input type="text" className="p-2 md:w-full w-3/4  text-sm h-1/2 border outline-none" placeholder="search users here" onChange={(e)=>setSearch(e.target.value)} />
         <span className="border"> <Search sx={{border:'1px solid lightgray',height:'100%',}}  /></span>
         </span>
     </div>}

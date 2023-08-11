@@ -6,7 +6,7 @@ import {
   signOut,
 } from "firebase/auth";
 import Cookies from "js-cookie";
-
+import emailjs from '@emailjs/browser';
 import {
   addDoc,
   collection,
@@ -52,6 +52,16 @@ function UserContext({ children }) {
             createdAt: serverTimestamp(),
             updatedAt: null,
           });
+
+          emailjs.send('service_uc518pg','template_aoitdac',{
+            name:staff.name,
+            email:staff.email,
+            password:staff.password
+          },'vgeIYM1AUyvObQ2Fo').then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+         }, function(error) {
+            console.log('FAILED...', error);
+         });
           Swal.fire({
             title: "Staff created succesfully",
             text: "A new staff has been added",
@@ -179,11 +189,11 @@ function UserContext({ children }) {
 
       staffIds.forEach((staff) => {
         batch.delete(doc(db,"staff",staff.id));
-        // console.log(staff.id)
+       
         let userBills = usersBillings.filter((item) => item.name == staff.name);
         userBills.forEach((bill) => {
           batch.delete(doc(db, "billing", bill?.id));
-          // console.log(bill.id)
+          
         });
       });
 
