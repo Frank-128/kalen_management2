@@ -141,7 +141,7 @@ const handleSubmitData = async () => {
                 <TextField error={errors.status} helperText={errors.payload} label="old password" value={passwords.oldPassword} onChange={(e)=>setPasswords({...passwords,oldPassword:e.target.value})} type='password'  />
                 <TextField  label="new password" value={passwords.newPassword} onChange={(e)=>setPasswords({...passwords,newPassword:e.target.value})} type='password' />
                 <TextField error={passwords.err} label="Confirm new password" value={passwords.confirmPassword} onChange={(e)=>setPasswords({...passwords,confirmPassword:e.target.value})} type='password'  />
-                <button onClick={()=>{if(passwords.newPassword !== passwords.confirmPassword){return setPasswords({...passwords,err:true})} updatePasswordMethod({oldPassword:passwords.oldPassword,newPassword:passwords.newPassword})}} className='p-2 text-white bg-blue-950 rounded'>Change My Password</button>
+                <button onClick={()=>{if(passwords.newPassword !== passwords.confirmPassword){return setPasswords({...passwords,err:true})} updatePasswordMethod({oldPassword:passwords.oldPassword,newPassword:passwords.newPassword});setPasswords({err:false})}} className='p-2 text-white bg-blue-950 rounded'>Change My Password</button>
               </AccordionDetails>
             </Accordion>
             </div>

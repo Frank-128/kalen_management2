@@ -157,7 +157,7 @@ function UserContext({ children }) {
   };
 
   const updatePasswordMethod = async(inputData)=>{
-    console.log(inputData)
+    setIsLoading(true)
     try{
       const user = auth.currentUser;
     
@@ -167,11 +167,17 @@ function UserContext({ children }) {
       updatePassword(user,inputData.newPassword).then(()=>{
         
         setErrors({status:false,payload:null})
+        setIsLoading(false)
+        Swal.fire({
+          title:'Action successfully',
+          text:'password changed successfully'
+        })
       }
-      ).catch((err)=>setErrors({status:true,payload:"input new password failed"}))
+      ).catch((err)=>{setErrors({status:true,payload:"input new password failed"});setIsLoading(false)})
 
     }catch(err){
       setErrors({status:true,payload:"Old password did not match"})
+      setIsLoading(false)
     }
     
 
