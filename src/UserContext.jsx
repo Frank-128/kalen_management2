@@ -1,9 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "./firebase";
 import {
+  EmailAuthCredential,
+  EmailAuthProvider,
   createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  reauthenticateWithCredential,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
 } from "firebase/auth";
 import Cookies from "js-cookie";
 import emailjs from '@emailjs/browser';
@@ -21,6 +27,7 @@ import {
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import generator  from "generate-password-browser";
 // const batchDb = firebase.firestore();
 
 const appContext = createContext();
@@ -28,17 +35,23 @@ const appContext = createContext();
 function UserContext({ children }) {
   const [users, setUsers] = useState([]);
   const [loggedUser, setLoggedUser] = useState({ active: false });
-  const [errors, setErrors] = useState({ status: false, payload: null });
+  const [errors, setErrors] = useState({ status: false, payload: "" });
   const [sidebar, setSidebar] = useState(false);
   const [usersBillings, setUsersBillings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const auth = getAuth();
 
   const navigate = useNavigate();
 
   const handleCreate = async (staff) => {
     setIsLoading(true);
+    const passwordGen = generator.generate({
+      length:6,
+      numbers:true,
+    })
     try {
-      await createUserWithEmailAndPassword(auth, staff.email, staff.password)
+      await createUserWithEmailAndPassword(auth, staff.email, passwordGen)
         .then(async (response) => {
           const docRef = await addDoc(collection(db, "staff"), {
             name: staff.name,
@@ -56,7 +69,7 @@ function UserContext({ children }) {
           emailjs.send('service_s0v7nhi','template_b1vsl3s',{
             name:staff.name,
             email:staff.email,
-            password:staff.password
+            password:passwordGen
           },'Xd-7yaYYB3NRIYQAE').then(function(response) {
             console.log('SUCCESS!', response.status, response.text);
          }, function(error) {
@@ -143,6 +156,27 @@ function UserContext({ children }) {
       });
   };
 
+  const updatePasswordMethod = async(inputData)=>{
+    console.log(inputData)
+    try{
+      const user = auth.currentUser;
+    
+      const credential =  EmailAuthProvider.credential(user?.email,inputData.oldPassword)
+     const res = await reauthenticateWithCredential(user,credential);
+      console.log(res)
+      updatePassword(user,inputData.newPassword).then(()=>{
+        
+        setErrors({status:false,payload:null})
+      }
+      ).catch((err)=>setErrors({status:true,payload:"input new password failed"}))
+
+    }catch(err){
+      setErrors({status:true,payload:"Old password did not match"})
+    }
+    
+
+  }
+  
   const handleLogout = async () => {
     await signOut(auth).then(() => {
       Cookies.remove("user");
@@ -241,6 +275,8 @@ function UserContext({ children }) {
   };
   useEffect(() => {
     handleRead();
+    setErrors({status:false,payload:""});
+    
   }, []);
 
   useEffect(() => {
@@ -413,6 +449,7 @@ function UserContext({ children }) {
         handleDeleteBill,
         handleMultipleDelete,
         handleMultipleDeleteBills,
+        updatePasswordMethod,
         errors,
         sidebar,
         logout,

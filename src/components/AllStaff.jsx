@@ -6,7 +6,7 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart,
 import Chart from "./Chart";
 
 function AllStaff() {
-  const { users, loggedUser } = useAppContext();
+  const { users, loggedUser,usersBillings } = useAppContext();
   const graphData = [
     {
       name:"Managers",
@@ -66,10 +66,10 @@ function AllStaff() {
           </span>
         </div>
         <div className="flex flex-col items-center bg-slate-100 rounded shadow-lg w-[8rem] md:w-[10rem] xl:w-[12rem] shadow-slate-600 p-4">
-          <span> Non-Staff Members</span>
+          <span> Total Bills</span>
           <span className="text-3xl font-bold">
             {" "}
-            <CountUp duration={5} end={3} />
+            <CountUp duration={5} end={usersBillings?.length} />
           </span>
         </div>
       </div>

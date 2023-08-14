@@ -257,22 +257,26 @@ const contextActions = useMemo(() => {
     />
     </div>
     <Modal open={billing} onClose={handleClose} className={styles.modal}>
-    <form className={styles.billing_form} onSubmit={handleSubmit(handleBill)}>
+    <form className={"bg-white w-1/3 rounded p-3 flex flex-col justify-around h-1/3"} onSubmit={handleSubmit(handleBill)}>
       <span className={styles.title}>Add new billing</span>
-     {loggedUser.role=="manager"?
-     <FormControl>
+    <div className="w-full sm:flex-row flex gap-2 flex-col ">
+    {loggedUser.role=="manager"?
+     <FormControl className="w-full">
       <InputLabel id='name'>Name</InputLabel>
       <Select label='Name' id='name' required {...register('name')}>
       {users?.map((item,k)=><MenuItem key={k} value={item.name}>{item.name}</MenuItem>)}
      </Select> 
      </FormControl>
      :<TextField label="Name" value={loggedUser?.name} {...register('name')} />}
-      <TextField required label="Item" {...register('item')} />
+      <TextField className="w-full" required label="Item" {...register('item')} />
       
-      <Controller name="price" label="Price" control={control} defaultValue={0} render={({field})=><NumericFormat required label="Price" thousandSeparator  {...field} allowNegative={false} customInput={TextField} />} />
-      <Controller name="selectedDate" control={control} defaultValue={new Date()} 
+    </div>
+      <div className="flex sm:flex-row w-full gap-2 flex-col ">
+      <Controller  name="price" label="Price" control={control} defaultValue={0} render={({field})=><NumericFormat className="w-full" required label="Price" thousandSeparator  {...field} allowNegative={false} customInput={TextField} />} />
+      <Controller  name="selectedDate" control={control} defaultValue={new Date()} 
       render={({field})=>
-      <TextField type="date"  label="Select Date" InputLabelProps={{shrink:true}} {...field} />} />
+      <TextField type="date" className="w-full "  label="Select Date" InputLabelProps={{shrink:true}} {...field} />} />
+      </div>
       <div className="md:flex-row flex flex-col gap-2">
       <button type="submit" className={"bg-green-800 p-2 text-white rounded basis-1/2"}>{isLoading?<CircularProgress/>:"Add New Billing"}</button>
       <button className="bg-red-800 p-2 basis-1/2 rounded text-white" onClick={handleClose}>Cancel</button>
@@ -283,21 +287,25 @@ const contextActions = useMemo(() => {
 
     {/* edit the bill */}
     <Modal open={editedBill.status} onClose={()=>setEditedBill({status:false})} className={styles.modal}>
-    <form className={styles.billing_form} onSubmit={handleSubmit(handleBillUpdateFunc)}>
+    <form className={"bg-white w-1/3 p-3 h-1/3 rounded flex flex-col justify-around"} onSubmit={handleSubmit(handleBillUpdateFunc)}>
       <span className={styles.title}>Edit {editedBill?.name}'s billing</span>
+     <div className="flex md:flex-row  flex-col gap-2 w-full ">
      {loggedUser.role=="manager"?
-     <FormControl>
-      <InputLabel id='name'>Name</InputLabel>
+     <FormControl className="w-1/2">
+     <InputLabel id='name'>Name</InputLabel>
       <Select label='Name' id='name' required value={editedBill?.name} onChange={(e)=>setEditedBill({...editedBill,name:e.target.value})}>
       {users?.map((item,k)=><MenuItem key={k} value={item.name}>{item.name}</MenuItem>)}
      </Select> 
      </FormControl>
      :<TextField label="Name" value={editedBill?.name} onChange={(e)=>setEditedBill({...editedBill,name:e.target.value})} />}
-      <TextField required label="Item" value={editedBill?.item} onChange={(e)=>setEditedBill({...editedBill,item:e.target.value})} />
-      <NumericFormat required label="Price" thousandSeparator onChange={(e)=>setEditedBill({...editedBill,price:e.target.value})}  value={editedBill?.price} allowNegative={false} customInput={TextField} />
+      <TextField className="w-1/2" required label="Item" value={editedBill?.item} onChange={(e)=>setEditedBill({...editedBill,item:e.target.value})} />
+     </div>
+     <div className="flex sm:flex-row flex-col gap-3">
+     <NumericFormat className="w-1/2" required label="Price" thousandSeparator onChange={(e)=>setEditedBill({...editedBill,price:e.target.value})}  value={editedBill?.price} allowNegative={false} customInput={TextField} />
       
       
-      <TextField type="date"  label="Select Date" onChange={(e)=>setEditedBill({...editedBill,billCreatedAt:e.target.value})} InputLabelProps={{shrink:true}} value={editedBill?.billCreatedAt} />
+      <TextField className="w-1/2" type="date"  label="Select Date" onChange={(e)=>setEditedBill({...editedBill,billCreatedAt:e.target.value})} InputLabelProps={{shrink:true}} value={editedBill?.billCreatedAt} />
+     </div>
       <div className="md:flex-row flex flex-col gap-2">
       <button type="submit" className={"bg-green-800 p-2 text-white rounded basis-1/2"}>{isLoading?<CircularProgress/>:"Add New Billing"}</button>
       <button className="bg-red-800 p-2 basis-1/2 rounded text-white" onClick={(e)=>setEditedBill({status:false})}>Cancel</button>

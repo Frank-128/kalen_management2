@@ -45,18 +45,12 @@ function AddUser({addUser,setAddUser}) {
     confirm_password: false,
   });
   const handleSubmitData = async (inputData) => {
-    if (inputData.password !== inputData.confirm_password)
-      return setErr({
-        ...err,
-        confirm_password: "Password and confirm password does not match",
-      });
+   
     const data = {
       name: inputData.name,
       email: inputData.email,
-      password: inputData.password,
       address: inputData.address,
       phoneNumber: inputData.phoneNumber,
-      bio: inputData.bio,
       gender: inputData.gender,
       role: inputData.role,
     };
@@ -214,48 +208,7 @@ function AddUser({addUser,setAddUser}) {
         </div>
        
 
-        <div className="flex  w-full gap-3 p-2 flex-col md:flex-row justify-between ">
-          <TextField
-            error={err.status && err.password !== false}
-            helperText={err.password}
-            onInvalid={(e) => {
-              e.preventDefault();
-              setErr({
-                ...err,
-                password: e.target.validationMessage,
-                status: true,
-              });
-            }}
-            onFocus={() => {
-              setErr({ ...err, password: false });
-            }}
-            required
-            label="Password"
-            type="password"
-            {...register("password")}
-            className='w-full'
-          />
-          <TextField
-            error={err.status && err.confirm_password !== false}
-            onInvalid={(e) => {
-              e.preventDefault();
-              setErr({
-                ...err,
-                confirm_password: e.target.validationMessage,
-                status: true,
-              });
-            }}
-            onFocus={() => {
-              setErr({ ...err, confirm_password: false });
-            }}
-            label="Confirm Password"
-            required
-            type="password"
-            {...register("confirm_password")}
-            helperText={err.confirm_password}
-            className='w-full'
-          />
-        </div>
+       
 
        <div className="flex md:flex-row w-full gap-3 flex-col">
         <button onClick={()=>{setAddUser(false);reset()}} className="p-3 my-5  bg-red-800 rounded text-white w-full">

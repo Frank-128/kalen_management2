@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, CircularProgress, Modal,FormControl,FormLabel,RadioGroup,FormControlLabel,Radio,InputLabel,Select,MenuItem,FormHelperText } from '@mui/material'
+import { TextField, CircularProgress, Modal,FormControl,FormLabel,RadioGroup,FormControlLabel,Radio,InputLabel,Select,MenuItem,FormHelperText, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppContext } from '../UserContext';
 import TheDataTable from './TheDataTable'
 import { useForm } from 'react-hook-form';
+import { Expand, ExpandMore } from '@mui/icons-material';
 
 function Profile() {
     const navigate = useNavigate();
     const location = useLocation();
     const [editOpen,setEditOpen] =useState(false);
     const [editedUser,setEditedUser]=useState({});
-    const {users,handleUpdate,isLoading} = useAppContext();
+    const {users,handleUpdate,isLoading,updatePasswordMethod,errors} = useAppContext();
+    
     const [userProfile,setProfile] = useState({})
+    const [passwords,setPasswords]=useState({
+      err:false,
+      oldPassword:"",
+      newPassword:"",
+      confirmPassword:""
+    });
     const id = location.pathname.split('/')[2]
     const [deleteAcc,setDeleteAcc] = useState(false)
     const [err, setErr] = useState({
@@ -36,6 +44,8 @@ function Profile() {
        
        setProfile(theUser) ;
     },[location,handleUpdate])
+
+
 const handleSubmitData = async () => {
     
     const data = {
@@ -51,6 +61,8 @@ const handleSubmitData = async () => {
     await handleUpdate(editedUser);
     setEditOpen(false);
   }
+
+  
   return (
     <div className=' p-3 text-slate-700'>
       <div className='flex items-start'>
@@ -116,6 +128,23 @@ const handleSubmitData = async () => {
            </div>
 
            </div>
+           <div className='flex justify-end w-3/5'>
+            <Accordion 
+            
+            >
+              <AccordionSummary 
+              expandIcon={<ExpandMore/>}
+              >
+                Change Password
+              </AccordionSummary>
+              <AccordionDetails className='flex flex-col gap-2'>
+                <TextField error={errors.status} helperText={errors.payload} label="old password" value={passwords.oldPassword} onChange={(e)=>setPasswords({...passwords,oldPassword:e.target.value})} type='password'  />
+                <TextField  label="new password" value={passwords.newPassword} onChange={(e)=>setPasswords({...passwords,newPassword:e.target.value})} type='password' />
+                <TextField error={passwords.err} label="Confirm new password" value={passwords.confirmPassword} onChange={(e)=>setPasswords({...passwords,confirmPassword:e.target.value})} type='password'  />
+                <button onClick={()=>{if(passwords.newPassword !== passwords.confirmPassword){return setPasswords({...passwords,err:true})} updatePasswordMethod({oldPassword:passwords.oldPassword,newPassword:passwords.newPassword})}} className='p-2 text-white bg-blue-950 rounded'>Change My Password</button>
+              </AccordionDetails>
+            </Accordion>
+            </div>
       </div>
       <Modal open={editOpen} className="flex justify-center items-center h-fit py-5 md:h-screen  overflow-y-scroll w-screen " onClose={()=>setEditOpen(false)}>
       
